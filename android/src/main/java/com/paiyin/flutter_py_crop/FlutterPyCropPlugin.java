@@ -33,7 +33,7 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "android_py_crop");
+    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_py_crop");
     channel.setMethodCallHandler(this);
   }
 
