@@ -97,6 +97,6 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
 
   private void beginCrop(Uri source) {
     Uri destination = Uri.fromFile(new File(activity.getCacheDir(), "cropped" + (new Date()).getTime()));
-    Crop.of(source, destination).asSquare().withMaxSize(30, 30).start(activity);
+    Crop.of(source, destination).asSquare().start(activity);
   }
 }

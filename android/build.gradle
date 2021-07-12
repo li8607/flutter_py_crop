@@ -31,6 +31,11 @@ android {
         disable 'InvalidPackage'
     }
     dependencies {
-        implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
+        implementation 'com.android.support:support-annotations:30.0.0'
+        implementation 'com.android.support:support-v4:30.0.0'
     }
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations-java5:15.0'
 }

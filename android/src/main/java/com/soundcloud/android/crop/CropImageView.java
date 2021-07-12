@@ -3,9 +3,10 @@ package com.soundcloud.android.crop;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 

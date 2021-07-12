@@ -31,6 +31,9 @@ import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.paiyin.flutter_py_crop.R;
+
+
 /*
  * Modified from version in AOSP.
  *
