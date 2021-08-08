@@ -1,6 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.paiyin.flutter_py_crop_example">
-   <application
+
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+
+    <application
         android:label="flutter_py_crop_example"
         android:icon="@mipmap/ic_launcher">
         <activity

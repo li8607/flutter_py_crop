@@ -1,10 +1,16 @@
 package com.paiyin.flutter_py_crop;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.soundcloud.android.crop.Crop;
 
@@ -21,7 +27,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 
 /** FlutterPyCropPlugin */
-public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
+public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener, PluginRegistry.RequestPermissionsResultListener {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -30,6 +36,9 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
   private Activity activity;
   private ActivityPluginBinding activityPluginBinding;
   private Result methodResult;
+
+
+  static final int RESULT_CODE_STARTCAMERA = 2345;
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -44,6 +53,8 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
       String sourcePath = call.argument("source_path");
       Uri sourceUri = Uri.fromFile(new File(sourcePath));
       beginCrop(sourceUri);
+    }else if (call.method.equals("pickAndCropImage")) {
+      pickImage();
     } else {
       result.success(null);
     }
@@ -59,6 +70,7 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
     activityPluginBinding = binding;
     activity = binding.getActivity();
     binding.addActivityResultListener(this);
+    binding.addRequestPermissionsResultListener(this);
   }
 
   @Override
@@ -74,6 +86,7 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
   @Override
   public void onDetachedFromActivity() {
     activityPluginBinding.removeActivityResultListener(this);
+    activityPluginBinding.removeRequestPermissionsResultListener(this);
   }
 
   @Override
@@ -91,8 +104,40 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
         methodResult.success(null);
         return true;
       }
+    }else if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
+      beginCrop(data.getData());
+      return true;
+    }
+      return false;
+  }
+
+  @Override
+  public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    switch(requestCode){
+      case RESULT_CODE_STARTCAMERA:
+        boolean cameraAccepted = grantResults[0]==PackageManager.PERMISSION_GRANTED;
+        if(cameraAccepted){
+          //授权成功之后，调用系统相机进行拍照操作等
+          Crop.pickImage(activity);
+        }else{
+          //用户授权拒绝之后，友情提示一下就可以了
+//          ToastUtil.show(context,"请开启应用拍照权限");
+        }
+        return true;
     }
     return false;
+  }
+
+  private void pickImage() {
+    //判断是否开户相册权限
+    if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(activity, android.Manifest.permission.CAMERA)) {
+      Crop.pickImage(activity);
+      Log.e("limf", "sdlfjalsdfj");
+    }else{
+      Log.e("limf", "2222");
+      //提示用户开户权限
+      ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.CAMERA}, RESULT_CODE_STARTCAMERA);
+    }
   }
 
   private void beginCrop(Uri source) {

@@ -21,7 +21,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,13 +31,14 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: GestureDetector(
             onTap: () async {
-              final PickedFile? pickedFile =
-                  await ImagePicker().getImage(source: ImageSource.gallery);
-              if (pickedFile != null) {
-                file =
-                    await FlutterPyCrop.cropImage(sourcePath: pickedFile.path);
-                print('result = ${file?.path}');
-              }
+              // final PickedFile? pickedFile =
+              //     await ImagePicker().getImage(source: ImageSource.gallery);
+              // if (pickedFile != null) {
+              //   file =
+              //       await FlutterPyCrop.cropImage(sourcePath: pickedFile.path);
+              //   print('result = ${file?.path}');
+              // }
+              file = await FlutterPyCrop.pickAndCropImage();
               setState(() {});
             },
             child: Column(

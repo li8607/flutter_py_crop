@@ -1,11 +1,12 @@
 package com.soundcloud.android.crop;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-
+import android.widget.Toast;
 
 
 /**
@@ -135,4 +136,27 @@ public class Crop {
     public static Throwable getError(Intent result) {
         return (Throwable) result.getSerializableExtra(Extra.ERROR);
     }
+
+    public static void pickImage(Activity activity) {
+        pickImage(activity, REQUEST_PICK);
+    }
+
+    public static void pickImage(Activity activity, int requestCode) {
+        try {
+            activity.startActivityForResult(getImagePicker(), requestCode);
+        } catch (ActivityNotFoundException e) {
+            showImagePickerError(activity);
+        }
+    }
+
+    private static Intent getImagePicker() {
+        return new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                .setType("image/*");
+    }
+
+    private static void showImagePickerError(Context context) {
+        Toast.makeText(context.getApplicationContext(), "无效的图片", Toast.LENGTH_SHORT).show();
+    }
+
 }
