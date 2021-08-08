@@ -38,7 +38,7 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
   private Result methodResult;
 
 
-  static final int RESULT_CODE_STARTCAMERA = 2345;
+  static final int RESULT_CODE_STARTCAMERA = 23450;
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -123,7 +123,7 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
           //用户授权拒绝之后，友情提示一下就可以了
 //          ToastUtil.show(context,"请开启应用拍照权限");
         }
-        return true;
+//        return true;
     }
     return false;
   }
@@ -132,9 +132,7 @@ public class FlutterPyCropPlugin  implements FlutterPlugin, MethodCallHandler, A
     //判断是否开户相册权限
     if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(activity, android.Manifest.permission.CAMERA)) {
       Crop.pickImage(activity);
-      Log.e("limf", "sdlfjalsdfj");
     }else{
-      Log.e("limf", "2222");
       //提示用户开户权限
       ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.CAMERA}, RESULT_CODE_STARTCAMERA);
     }
